@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-// import { Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import axios from "axios";
 import PokeCard from "@components/PokeCard";
 import Fight from "@components/Fight";
@@ -7,7 +7,7 @@ import Loading from "@components/Loading";
 import { AuthContext } from "../context/AuthContext";
 
 export default function Attack() {
-  const { userId, userPoke1 } = useContext(AuthContext);
+  const { userId, userPoke1, userFightsDone } = useContext(AuthContext);
   const [team, setTeam] = useState([]);
   const [defTeam, setDefTeam] = useState([]);
   const [defId, setDefId] = useState();
@@ -219,7 +219,7 @@ export default function Attack() {
               alt="pokeball"
               className="max-h-[100%] "
             />
-            {!defId && !defLoading ? (
+            {!defId && !defLoading && userFightsDone < 5 ? (
               <button
                 type="button"
                 onClick={handleValidate}
@@ -229,10 +229,10 @@ export default function Attack() {
               </button>
             ) : (
               <div className="inline-flex items-center max-h-[80%] px-2 py-3  shadow-sm text-sm md:text-base font-medium text-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black">
-                Equipe de {defName}
+                {userFightsDone < 5 ? `Equipe de ${defName}` : "Combats 5/5"}
               </div>
             )}
-            {teamSelect.length === 5 && (
+            {teamSelect.length === 5 && defTeam.length === 5 && (
               <div
                 role="button"
                 tabIndex={-1}
@@ -279,8 +279,31 @@ export default function Attack() {
             );
           })
         ) : (
-          <div className=" h-[100%] w-[100%] bg-center bg-contain bg-no-repeat bg-[url('/image/silhouette.png')]">
+          <div className=" h-[100%] w-[100%] bg-center bg-contain bg-no-repeat bg-[url('/image/silhouette.png')] flex justify-center items-center">
             {defLoading && <Loading />}
+            {userFightsDone > 4 && (
+              <div
+                className="        
+              w-[90%] h-[90%] md:h-[60%]
+            shadow p-2  bg-[rgba(196,42,42,255)] flex flex-col  justify-center border-2 border-black cursor-default  items-center rounded-3xl"
+              >
+                <div className="w-[95%] h-[90%] bg-[rgba(188,188,188,255)] flex justify-center items-center border-2 border-black  rounded-3xl ">
+                  <div className="w-[95%] h-[90%] bg-[rgba(194,217,173,255)] rounded-3xl p-2 border-2 border-black overflow-auto text-center flex-col">
+                    <p>
+                      Vous avez déjà combattu 5 fois avec cette équipe.
+                      <br />
+                      Changez d'équipe pour continuer
+                    </p>
+                    <Link
+                      to="/create-team"
+                      className="inline-block items-center max-h-[5vh] mt-2 px-6 py-2 md:py-3 border-2 border-double border-black shadow-sm text-sm md:text-base font-medium rounded-md text-gray-700 hover:bg-gray-600 hover:text-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
+                    >
+                      Changer d'équipe
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         )}
       </div>

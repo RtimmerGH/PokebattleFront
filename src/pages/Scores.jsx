@@ -22,7 +22,7 @@ export default function Scores() {
       <div
         className="        
       w-[95%] h-[95%]
-    shadow p-10  bg-[rgba(196,42,42,255)] flex flex-col  justify-start border-2 border-black cursor-default  items-center rounded-3xl"
+    shadow p-2  bg-[rgba(196,42,42,255)] flex flex-col  justify-start border-2 border-black cursor-default  items-center rounded-3xl"
       >
         <div className="flex m-1 justify-around item w-[100%] ">
           <img
@@ -32,7 +32,7 @@ export default function Scores() {
           />
         </div>
         <div className="w-[90%] h-[70%] bg-[rgba(188,188,188,255)] flex justify-center items-center border-2 border-black  rounded-3xl ">
-          <div className="w-[90%] h-[90%] bg-[rgba(194,217,173,255)] rounded-3xl p-5 border-2 border-black overflow-auto">
+          <div className="w-[90%] h-[90%] bg-[rgba(194,217,173,255)] rounded-3xl p-1 md:p-5 border-2 border-black overflow-auto">
             {ranking.length > 0 &&
               ranking.map((user) => {
                 return (

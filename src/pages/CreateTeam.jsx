@@ -8,8 +8,14 @@ import { GiShield } from "react-icons/gi";
 import { AuthContext } from "../context/AuthContext";
 
 export default function CreateTeam() {
-  const { userId, teamRefresh, setTeamRefresh, userPoke1 } =
-    useContext(AuthContext);
+  const {
+    userId,
+    teamRefresh,
+    setTeamRefresh,
+    userPoke1,
+    userFightsDone,
+    setUserFightsDone,
+  } = useContext(AuthContext);
   const [teamOffer, setTeamOffer] = useState([]);
   const [teamSelect, setTeamSelect] = useState([]);
   const [renderSelect, setRenderSelect] = useState(false);
@@ -36,10 +42,11 @@ export default function CreateTeam() {
       const poke = [...teamSelect];
       try {
         const response = await axios.post(
-          `/teams`,
+          `/teams/${userId}`,
           {
             userId,
             poke,
+            userFightsDone,
           },
           {
             headers: {
@@ -49,6 +56,7 @@ export default function CreateTeam() {
         );
 
         if (response) {
+          setUserFightsDone(0);
           setValidated(true);
           if (!userPoke1) {
             setTeamRefresh(!teamRefresh);

@@ -1,9 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import PokeCard from "@components/PokeCard";
+import { AuthContext } from "../context/AuthContext";
 
 export default function Fight({ defTeam, attackTeam, userId, defId }) {
+  const { userFightsDone, setUserFightsDone } = useContext(AuthContext);
   const navigate = useNavigate();
   const [attackScore, setAttackScore] = useState(0);
   const [defScore, setDefScore] = useState(0);
@@ -50,7 +52,6 @@ export default function Fight({ defTeam, attackTeam, userId, defId }) {
       const fightLogsTemp = fightLogs;
       fightLogsTemp.push(`${attackTeam[turn].name} est vaincu !`);
       setDefScore((prev) => prev + 1);
-      // setTurn((prev) => prev + 1);
       setLogs(logsTemp);
       setFightLogs(fightLogsTemp);
       setPokeAttackAttack(false);
@@ -107,11 +108,12 @@ export default function Fight({ defTeam, attackTeam, userId, defId }) {
     const defUserId = defId;
     try {
       const response = await axios.post(
-        `/fights`,
+        `/fights/${userId}`,
         {
           attackUserId,
           defUserId,
           winnerId,
+          userFightsDone,
         },
         {
           headers: {
@@ -121,6 +123,7 @@ export default function Fight({ defTeam, attackTeam, userId, defId }) {
       );
 
       if (response) {
+        setUserFightsDone((prev) => prev + 1);
         navigate("/");
       }
     } catch (error) {
